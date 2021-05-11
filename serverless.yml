@@ -17,6 +17,8 @@ provider:
   region: us-east-1
   environment:
     tableName: proj
+    stripeSecretKey: ${env:STRIPE_SECRET_KEY}
+
 
   iamRoleStatements:
     - Effect: Allow
@@ -77,4 +79,12 @@ functions:
       - http:
           path: proj/{id}
           method: delete
+          authorizer: aws_iam
+
+  billing:
+    handler: billing.main
+    events:
+      - http:
+          path: billing
+          method: post
           authorizer: aws_iam
